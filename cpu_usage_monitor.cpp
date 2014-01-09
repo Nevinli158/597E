@@ -8,9 +8,12 @@
 #include <sys/types.h>
 #include <dirent.h>
 
+/*
+	Returns whether or not the given string is a number.
+*/
 bool isNumber(char* str){
-	if(str == NULL || str == '\0')	return false;
-	while(str != '\0'){
+	if(str == NULL || *str == '\0')	return false;
+	while(*str != '\0'){
 		if(*str < '0' || *str > '9'){
 			return false;
 		}
@@ -19,6 +22,10 @@ bool isNumber(char* str){
 	return true;
 }
 
+
+/*
+	Returns whether or not the process is currently active. Only works for process names that do not contain spaces. 
+*/
 bool checkProcessActive(std::string activeProcessName){
 	const char* procPath = "/proc/";
 	char procCmdlineFilePath[350];
@@ -28,18 +35,31 @@ bool checkProcessActive(std::string activeProcessName){
 		return false;
 	}
 
+	// /proc contains a directory containing process information for each process id.
 	dirent* procDirEntry = NULL;
 	while(procDirEntry = readdir(procDir)){
+		//If the entry in proc is a process id directory.
 		if(procDirEntry->d_type == DT_DIR 	
 			&& isNumber(procDirEntry->d_name)){
+			//Make the path to the file that contains the process name.
 			strcpy(procCmdlineFilePath, procPath);
 			strcat(procCmdlineFilePath, procDirEntry->d_name);
-			strcat(procCmdlineFilePath, "/cmdline");
-			std::cout<<"Reading " << procCmdlineFilePath << std::endl;
+			strcat(procCmdlineFilePath, "/status");
+			//std::cout<<"Reading " << procCmdlineFilePath << std::endl;
+			
+			//Read the process name from the file.
 			std::ifstream procCmdLineStream(procCmdlineFilePath);
 			std::string procName;
-		 	std::getline(procCmdLineStream, procName);
-			if(activeProcessName.compare(procName) == 0){
+		 	std::getline(procCmdLineStream, procName); //First line of status is Name: <Process Name>
+			
+			std::stringstream ss;
+			ss << procName;
+			ss >> procName; //Parse out the Name: part.
+			ss >> procName;	//Get process name.
+
+			//If the process name is identical to the input argument, return true.
+			//Converted to c_strings to fix bug with null character being counted in string length.
+			if(strcmp(procName.c_str(), activeProcessName.c_str())== 0){
 				return true;
 			}
 		}
@@ -106,7 +126,7 @@ std::pair<int,int> getUsageIdleTimes(){
 */
 double getCPUUtil(int sampleRateMS){
 	std::pair<int,int> usageTimes = getUsageIdleTimes();
-	usleep(sampleRateMS * 1000); //500 milliseconds.
+	usleep(sampleRateMS * 1000); //* 1000 converts us to ms.
 	std::pair<int,int> usageTimes2 = getUsageIdleTimes();
 	if(usageTimes.first == -1 || usageTimes.second == -1
 		|| usageTimes2.first == -1 || usageTimes2.second == -1){
@@ -114,8 +134,8 @@ double getCPUUtil(int sampleRateMS){
 		return -1;
 	}
 
-	std::cout<<"Time1 First:" << usageTimes.first <<"Second:" << usageTimes.second << std::endl;
-	std::cout<<"Time2 First:" << usageTimes2.first <<"Second:" << usageTimes2.second << std::endl;
+	/*std::cout<<"Time1 First:" << usageTimes.first <<"Second:" << usageTimes.second << std::endl;
+	std::cout<<"Time2 First:" << usageTimes2.first <<"Second:" << usageTimes2.second << std::endl;*/
 
 	double utilTimeDiff = usageTimes2.first - usageTimes.first;
 	double idleTimeDiff = usageTimes2.second - usageTimes.second;
