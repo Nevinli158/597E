@@ -8,6 +8,58 @@
 #include <sys/types.h>
 #include <dirent.h>
 
+//Socket Headers
+#include <cstring>
+#include <sys/socket.h>
+#include <netdb.h>
+
+const std::string IP = "127.0.0.1";
+const std::string PORT = "9001";
+const double MIN_UTIL_THRESHOLD = .3;
+
+
+int connectToServer(std::string ip, std::string port){
+	int status;
+	addrinfo host_info;
+	addrinfo *host_info_list;
+	memset(&host_info, 0, sizeof host_info);//Zero out host_info.
+	host_info.ai_family = AF_UNSPEC;
+	host_info.ai_socktype = SOCK_STREAM;
+	status = getaddrinfo(ip.c_str(), port.c_str(), &host_info, &host_info_list);
+	int socketfd;
+	socketfd = socket(host_info_list->ai_family, host_info_list->ai_socktype, 
+host_info_list->ai_protocol);
+	if (socketfd == -1){
+		std::cout << "socket error ";	
+	}
+	return socketfd;
+}
+
+int sendBytesToServer(int socketfd, std::string msg){
+	const char* msg_cstr = msg.c_str();
+	int len;
+	ssize_t bytes_sent;
+	len = strlen(msg_cstr);
+	bytes_sent = send(socketfd, msg_cstr, len, 0);
+	if(bytes_sent != len){
+		std::cout << "sending error ";
+		return -1;
+	}
+	return socketfd;
+}
+
+/*
+	msgType: 1 - Server is overloaded
+		 2 - Server is now not overloaded.
+		 3 - Server process is down.
+		 4 - Server process is up.
+*/
+bool sendMsgToServer(int socketfd, int msgType){
+	std::stringstream ss;
+	ss << msgType;
+	return sendBytesToServer(socketfd, ss.str());
+}
+
 /*
 	Returns whether or not the given string is a number.
 */
@@ -145,12 +197,38 @@ double getCPUUtil(int sampleRateMS){
 
 int main(int argc, const char* argv[])
 {
-	std::cout<<"Utilization Rate:"<<getCPUUtil(500)<<std::endl;
-	bool isPidginActive = checkProcessActive("pidgin");
-	if(isPidginActive){
-		std::cout<<"Pidgin is active."<<std::endl;
-	} else {
-		std::cout<<"Pidgin is not active."<<std::endl;
+	bool enableServer = false; 
+	int serverfd = -1;
+	bool connectedToServer = false;
+	if(enableServer == true){
+		serverfd = connectToServer(IP, PORT);
+		if(serverfd != -1){
+			connectedToServer = true;
+			std::cout<<"Successfully connected to server!"<<std::endl;
+		}
+	} 
+	
+	while(true){
+
+		double utilRate = getCPUUtil(1000);
+		std::cout<<"Utilization Rate:"<<utilRate<<std::endl;
+		bool isPidginActive = checkProcessActive("pidgin");
+		if(isPidginActive){
+			std::cout<<"Pidgin is active."<<std::endl;
+		} else {
+			std::cout<<"Pidgin is not active."<<std::endl;
+		}
+
+		if(connectedToServer == true){
+			int utilMsg = -1;
+			if(utilRate > MIN_UTIL_THRESHOLD){ utilMsg = 1; } // overloaded
+			else { utilMsg = 2; } // not overloaded
+			sendMsgToServer(serverfd, utilMsg);
+
+			if(isPidginActive){ utilMsg = 4; } //Pidgin is up
+			else { utilMsg = 3; } //Pidgin is down.
+			sendMsgToServer(serverfd, utilMsg);
+		}
 	}
 }
 
