@@ -14,9 +14,11 @@
 #include <netdb.h>
 
 const std::string IP = "127.0.0.1";
-const std::string PORT = "9001";
+const std::string PORT = "9002";
 const double MIN_UTIL_THRESHOLD = .3;
-
+const std::string ACTIVE_PROCESS_NAME = "pidgin";
+const int DELAY_BETWEEN_UPDATES_MS = 1000;
+const bool ENABLE_SEND_TO_SERVER = true;
 
 int connectToServer(std::string ip, std::string port){
 	int status;
@@ -32,6 +34,10 @@ host_info_list->ai_protocol);
 	if (socketfd == -1){
 		std::cout << "socket error ";	
 	}
+
+    status = connect(socketfd, host_info_list->ai_addr, host_info_list->ai_addrlen);
+    if (status == -1)  std::cout << "connect error";
+
 	return socketfd;
 }
 
@@ -135,7 +141,7 @@ std::pair<int,int> parseUsageIdleTimesFromLine(std::string line){
 
 	ss << line;
 	ss >> tempString; //parse out the word cpu from the string
-	std::cout << "tempString:" + tempString << std::endl;
+	//std::cout << "tempString:" + tempString << std::endl;
 
 	//Sum of the first three ints constitutes usage time.
 	for(int i = 0; i < 3; i++){
@@ -144,8 +150,8 @@ std::pair<int,int> parseUsageIdleTimesFromLine(std::string line){
 	}
 	//Fourth int is idle time.
 	ss >> idleTime;
-	std::cout << "usageTime:" << usageTime << std::endl;
-	std::cout << "idleTime:" << idleTime << std::endl;
+	//std::cout << "usageTime:" << usageTime << std::endl;
+	//std::cout << "idleTime:" << idleTime << std::endl;
 	return std::pair<int,int>(usageTime,idleTime);
 }
 
@@ -197,10 +203,9 @@ double getCPUUtil(int sampleRateMS){
 
 int main(int argc, const char* argv[])
 {
-	bool enableServer = false; 
 	int serverfd = -1;
 	bool connectedToServer = false;
-	if(enableServer == true){
+	if(ENABLE_SEND_TO_SERVER == true){
 		serverfd = connectToServer(IP, PORT);
 		if(serverfd != -1){
 			connectedToServer = true;
@@ -209,10 +214,9 @@ int main(int argc, const char* argv[])
 	} 
 	
 	while(true){
-
-		double utilRate = getCPUUtil(1000);
+		double utilRate = getCPUUtil(DELAY_BETWEEN_UPDATES_MS);
 		std::cout<<"Utilization Rate:"<<utilRate<<std::endl;
-		bool isPidginActive = checkProcessActive("pidgin");
+		bool isPidginActive = checkProcessActive(ACTIVE_PROCESS_NAME);
 		if(isPidginActive){
 			std::cout<<"Pidgin is active."<<std::endl;
 		} else {
