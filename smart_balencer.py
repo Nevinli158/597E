@@ -143,10 +143,10 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                     print("Client is not overloaded!")
                 elif msg=='3':
                     print("Client process is up!")
-		    self.my_smart_balancer.hosts['10.0.0.1'][2] = True
+		    self.server.smart_balancer.hosts['10.0.0.1'][2] = True
                 elif msg=='4':
                     print("Client process is down!")
-		    self.my_smart_balancer.hosts['10.0.0.1'][2] = False
+		    self.server.smart_balancer.hosts['10.0.0.1'][2] = False
                 else:
                     print("Msg Not Recognized!")
 
@@ -154,15 +154,15 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             print(self.data)		
 
 def start_server (args):		
-    args[0].serve_forever()            
+    args.serve_forever()            
             
 def main ():
     HOST, PORT = "localhost", 9002
 
     my_smart_balancer = smart_balancer()
     server = SmartBalancerTCPServer((HOST,PORT), MyTCPHandler, my_smart_balancer)
-    server.daemon = True
     serverThread = threading.Thread(target=start_server, args=(server,))
+    serverThread.daemon = True
     serverThread.start()
     
     return my_smart_balancer >> mac_learner()

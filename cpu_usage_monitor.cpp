@@ -246,7 +246,7 @@ int main(int argc, const char* argv[])
 			if(isProcessNowActive != isProcessActive){
 				std::cout<<"Sending Process Active Change To Server"<<std::endl;
 				sendMsgToServer(serverfd, utilMsg);
-				isProcessNowActive = isProcessActive;
+				isProcessActive = isProcessNowActive;
 			}
 		}
 	}
