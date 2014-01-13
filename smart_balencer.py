@@ -136,17 +136,20 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 break
             self.data = self.data.strip()
 
+	    hostArray = self.server.smart_balancer.hosts['10.0.0.1']
             for msg in self.data:
                 if msg=='1':
                     print("Client is overloaded!")
+		    hostArray[1] = False
                 elif msg=='2':
                     print("Client is not overloaded!")
+		    hostArray[1] = True
                 elif msg=='3':
-                    print("Client process is up!")
-		    self.server.smart_balancer.hosts['10.0.0.1'][2] = True
-                elif msg=='4':
                     print("Client process is down!")
-		    self.server.smart_balancer.hosts['10.0.0.1'][2] = False
+		    hostArray[2] = False
+                elif msg=='4':
+                    print("Client process is up!")
+		    hostArray[2] = True
                 else:
                     print("Msg Not Recognized!")
 
