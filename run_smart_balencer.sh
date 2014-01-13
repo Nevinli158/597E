@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pyretic.py -m p0 pyretic.examples.smart_balencer
+pyretic.py -m p0 smart_balencer

@@ -12,6 +12,8 @@ from pyretic.lib.std import *
 from pyretic.lib.query import *
 from pyretic.modules.mac_learner import mac_learner
 
+import SocketServer
+
 class smart_balancer(DynamicPolicy):
 
     def __init__(self):
@@ -27,6 +29,10 @@ class smart_balancer(DynamicPolicy):
         self.ui.daemon = True
         self.set_initial_state()
         self.ui.start()
+		
+	self.server = threading.Thread(target=self.server_loop)
+	self.server.daemon = True
+	self.server.start()
 
     def set_initial_state(self):
         # Set a query for the first packet fo every flow
@@ -118,6 +124,37 @@ class smart_balancer(DynamicPolicy):
             else:
                 print "Invalid option"
             
+    class MyTCPHandler(SocketServer.BaseRequestHandler):
+        def handle(self):
+            while 1:
+                # self.request is the TCP socket connected to the client
+                self.data = self.request.recv(1024)
+                if not self.data:
+                    break
+                self.data = self.data.strip()
+
+                for msg in self.data:
+                    if msg=='1':
+                        print("Client is overloaded!")
+                    elif msg=='2':
+                        print("Client is not overloaded!")
+                    elif msg=='3':
+                        print("Client process is up!")
+                    elif msg=='4':
+                        print("Client process is down!")
+                    else:
+                        print("Msg Not Recognized!")
+
+                print("{} wrote:".format(self.client_address[0]))
+                print(self.data)		
+	
+    def server_loop (self):		
+        HOST, PORT = "localhost", 9002
+        # Create the server, binding to localhost on port 9002
+        server = SocketServer.TCPServer((HOST, PORT), smart_balencer.MyTCPHandler)
+        # Activate the server; this will keep running until you
+        # interrupt the program with Ctrl-C
+        server.serve_forever()
 
 def main ():
     return smart_balancer() >> mac_learner()
