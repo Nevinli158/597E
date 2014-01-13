@@ -1,0 +1,3 @@
+h4 ~/pyretic/ping_at.sh 1 &
+h5 ~/pyretic/ping_at.sh 2 &
+h6 ~/pyretic/ping_at.sh 3 &
