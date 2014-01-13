@@ -13,6 +13,7 @@ from pyretic.lib.query import *
 from pyretic.modules.mac_learner import mac_learner
 
 import SocketServer
+import threading
 
 class smart_balancer(DynamicPolicy):
 
@@ -24,15 +25,11 @@ class smart_balancer(DynamicPolicy):
         # This dictionary tracks host status
         self.hosts = {'10.0.0.1':[0,True,True], '10.0.0.2':[0,True,False], '10.0.0.3':[0,True,False]}
         super(smart_balancer,self).__init__(true)
-        import threading
+        
         self.ui = threading.Thread(target=self.ui_loop)
         self.ui.daemon = True
         self.set_initial_state()
         self.ui.start()
-		
-	self.server = threading.Thread(target=self.server_loop)
-	self.server.daemon = True
-	self.server.start()
 
     def set_initial_state(self):
         # Set a query for the first packet fo every flow
@@ -124,37 +121,48 @@ class smart_balancer(DynamicPolicy):
             else:
                 print "Invalid option"
             
-    class MyTCPHandler(SocketServer.BaseRequestHandler):
-        def handle(self):
-            while 1:
-                # self.request is the TCP socket connected to the client
-                self.data = self.request.recv(1024)
-                if not self.data:
-                    break
-                self.data = self.data.strip()
 
-                for msg in self.data:
-                    if msg=='1':
-                        print("Client is overloaded!")
-                    elif msg=='2':
-                        print("Client is not overloaded!")
-                    elif msg=='3':
-                        print("Client process is up!")
-                    elif msg=='4':
-                        print("Client process is down!")
-                    else:
-                        print("Msg Not Recognized!")
+class SmartBalancerTCPServer(SocketServer.TCPServer):
+    def __init__(self, server_address, RequestHandlerClass, smart_balancer, bind_and_activate=True):
+	self.smart_balancer = smart_balancer
+	SocketServer.TCPServer.__init__(self, server_address, RequestHandlerClass, bind_and_activate=True)
 
-                print("{} wrote:".format(self.client_address[0]))
-                print(self.data)		
-	
-    def server_loop (self):		
-        HOST, PORT = "localhost", 9002
-        # Create the server, binding to localhost on port 9002
-        server = SocketServer.TCPServer((HOST, PORT), smart_balencer.MyTCPHandler)
-        # Activate the server; this will keep running until you
-        # interrupt the program with Ctrl-C
-        server.serve_forever()
+class MyTCPHandler(SocketServer.BaseRequestHandler):
+    def handle(self):
+        while 1:
+            # self.request is the TCP socket connected to the client
+            self.data = self.request.recv(1024)
+            if not self.data:
+                break
+            self.data = self.data.strip()
 
+            for msg in self.data:
+                if msg=='1':
+                    print("Client is overloaded!")
+                elif msg=='2':
+                    print("Client is not overloaded!")
+                elif msg=='3':
+                    print("Client process is up!")
+		    self.my_smart_balancer.hosts['10.0.0.1'][2] = True
+                elif msg=='4':
+                    print("Client process is down!")
+		    self.my_smart_balancer.hosts['10.0.0.1'][2] = False
+                else:
+                    print("Msg Not Recognized!")
+
+            print("{} wrote:".format(self.client_address[0]))
+            print(self.data)		
+
+def start_server (args):		
+    args[0].serve_forever()            
+            
 def main ():
-    return smart_balancer() >> mac_learner()
+    HOST, PORT = "localhost", 9002
+
+    my_smart_balancer = smart_balancer()
+    server = SmartBalancerTCPServer((HOST,PORT), MyTCPHandler, my_smart_balancer)
+    server.daemon = True
+    serverThread = threading.Thread(target=start_server, args=(server,))
+    serverThread.start()
+    
+    return my_smart_balancer >> mac_learner()
