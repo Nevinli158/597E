@@ -1,13 +1,33 @@
 \begin{thebibliography}{1}
 
+\bibitem{Pyretic}
+N.~Foster J. Rexford D.~Walker C.~Monsanto, J.~Reich.
+\newblock Composing software-defined networks.
+\newblock 2013.
+
+\bibitem{PyResonance}
+M.~Shahbaz J. Reich N. Feamster R.~Clark H.~Kim, A.~Gupta.
+\newblock Simpler network configuration with state-based network policies.
+\newblock 2013.
+
 \bibitem{Hedera}
 B.~Raghavan N. Huang A.~Vahdat M.~Al-Fares, S.~Radhakrishnan.
-\newblock Hedera: dynamic flow scheduling for data center networks.
+\newblock Hedera: Dynamic flow scheduling for data center networks.
 \newblock 2010.
+
+\bibitem{Ananta}
+L.~Yuan A. Murthy A. Greenberg D. A. Maltz R. Kern H. Kumar M. Zikos H. Wu C.
+  Kim N.~Karri P.~Patel, D.~Bansal.
+\newblock Ananta: Cloud scale load balancing.
+\newblock 2013.
 
 \bibitem{HONE}
 M.~J. Freedman J. Rexford D.~Walker P~Sun, M.~Yu.
 \newblock Programmable host-network traffic management.
 \newblock 2013.
+
+\bibitem{Onix}
+Natasha Gude Jeremy Stribling Leon Poutievski Min Zhu Rajiv Ramanathan Yuichiro
+  Iwata Hiroaki Inoue Takayuki Hama Scott~Shenker Teemu~Koponen, Martin~Casado.
 
 \end{thebibliography}
