@@ -1,0 +1,13 @@
+\begin{thebibliography}{1}
+
+\bibitem{Hedera}
+B.~Raghavan N. Huang A.~Vahdat M.~Al-Fares, S.~Radhakrishnan.
+\newblock Hedera: dynamic flow scheduling for data center networks.
+\newblock 2010.
+
+\bibitem{HONE}
+M.~J. Freedman J. Rexford D.~Walker P~Sun, M.~Yu.
+\newblock Programmable host-network traffic management.
+\newblock 2013.
+
+\end{thebibliography}
