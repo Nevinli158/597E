@@ -1,5 +1,5 @@
 \documentclass[10pt]{article}
-\usepackage{graphicx}
+\usepackage{graphicx, subfig}
 \begin{document}
 \title{SmartBalancer}
 \author{Raghav Sethi and Nevin Li}
@@ -18,22 +18,22 @@
 \end{enumerate}
 
 
-\paragraph{} The rest of the paper is structured as follows. Section 2\ref{sec:related} discusses how this work relates to several other similar systems. Section 3\ref{sec:design} describes the design of the monitoring utility and controller application that comprise SmartBalancer. Section 4\ref{sec:evaluation} shows some preliminary results.
+\paragraph{} The rest of the paper is structured as follows. Section \ref{sec:related} discusses how this work relates to several other similar systems. Section \ref{sec:design} describes the design of the monitoring utility and controller application that comprise SmartBalancer. Section \ref{sec:evaluation} shows some preliminary results.
 
 \section{Related Work}
 \label{sec:related}
 
-\paragraph{} Load balancing was always considered a major application of SDN networks ever since the inception of SDN. Projects such as Hedera \cite{Hedera} have focused on optimizing for common use cases such as the FatTree topology found in data centers. However, very little research has been done on integrating the end-hosts of the network into load balancing systems. [insert sentence here]
+\paragraph{} Load balancing was always considered a major application of SDN networks ever since the inception of SDN. Projects such as Hedera \cite{Hedera} have focused on optimizing for common use cases such as the FatTree topology found in data centers. However, very little research has been done on integrating the end-hosts of the network into load balancing systems.
 
 
 
 \subsection{HONE}
 
-\paragraph{} Our work shares the same goals as Sun et. al.’s work on HONE. HONE is a traffic management system that provides network administrators with a platform to collect and aggregate network statistics from both hosts and switches on the network. This system was amongst the first SDN platform to incorporate metrics obtained directly from the end-host into network management. HONE\cite{HONE} runs an agent application on each host that gathers relevant end-host information and coordinates with other end-hosts to aggregate the information and return the result to a custom HONE controller. The system also provides uniform and programmable map-reduce interface for administrators to build applications that request and respond to the desired metrics. The HONE platform is specifically designed to collect and respond to host metrics, and significant effort has been put into distributed streaming, filtering and aggregation mechanisms. SmartBalancer studies whether it is feasible to build a load-balancing system that uses host-based metrics using more ‘general’ controller platforms like Pyretic\cite{Pyretic} and PyResonance\cite{PyResonance}.
+\paragraph{} HONE\cite{HONE} is the first project that attempts to integrate end-hosts into network management on a level that is more sophisticated than simply viewing them as software switches. Our work shares the same goals as Sun et. al.’s work on HONE. The HONE platform is a traffic management system that provides network administrators with a platform to collect and aggregate network statistics from both hosts and switches on the network. This system was amongst the first SDN platform to incorporate metrics obtained directly from the end-host into network management. HONE runs an agent application on each host that gathers relevant end-host information and coordinates with other end-hosts to aggregate the information and return the result to a custom HONE controller. The system also provides uniform and programmable map-reduce interface for administrators to build applications that request and respond to the desired metrics. The HONE platform is specifically designed to collect and respond to host metrics, and significant effort has been put into distributed streaming, filtering and aggregation mechanisms. SmartBalancer studies whether it is feasible to build a load-balancing system that uses host-based metrics using more ‘general’ controller platforms like Pyretic\cite{Pyretic} and PyResonance\cite{PyResonance}.
 
 \subsection{Pyretic}
 
-\paragraph{} Pyretic\cite{Pyretic} is controller platform and domain-specific language that allows programmers to concisely specify a multitude of possible static and dynamic applications that run on top of the POX controller. The system allows easy implementation of parallel and sequential policies (using the || and >> operators), and results in code that is modular, easy to understand, and composable. The policies themselves are defined in the powerful NetCore policy language. Pyretic also provides an intuitive layer of abstraction over the network – providing a simplified model of the network that appears to break up complicated systems into simpler components and glue other components (switches) together. This is well-suited for SmartBalancer, as it allows us to easily express dynamic load balancing policies that change along with host load.
+\paragraph{} Pyretic\cite{Pyretic} is a controller platform and domain-specific language that allows programmers to concisely specify a multitude of possible static and dynamic applications that run on top of the POX controller. The system allows easy implementation of parallel and sequential policies (using the || and >> operators), and results in code that is modular, easy to understand, and composable. The policies themselves are defined in the powerful NetCore policy language. Pyretic also provides an intuitive layer of abstraction over the network – providing a simplified model of the network that appears to break up complicated systems into simpler components and glue other components (switches) together. This is well-suited for SmartBalancer, as it allows us to easily express dynamic load balancing policies that change along with host load.
 
 
 \subsection{PyResonance}
@@ -54,7 +54,7 @@
 \item Once the controller has received a message from an end-host monitoring application, it modifies the network policy as needed.
 \end{enumerate}
 
-\paragraph{} An example demonstrating this flow of operations is given in the Evaluation\ref{sec:evaluation} section. The following sections describe the implementation and design decisions behind these two modules.
+\paragraph{} An example demonstrating this flow of operations is given in the Evaluation section\ref{fig:subfigures}. The following sections describe the implementation and design decisions behind these two modules.
 
 \subsection{Gatherer: An End-Host Monitoring Utility}
 
@@ -76,12 +76,34 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
-\paragraph{} For our tests, we ran Super Pi (to stress the CPU) on a host machine with our monitoring tool running and repeatedly pinged our canonical IP from different virtual hosts. We then measured the time difference between when the CPU utilization of the host reached its target threshold to when SmartBalancer began routing new flows to a different host (response time).
+\paragraph{} 
+\begin{figure}[ht!]
+     \begin{center}
+        \subfloat{
+            \includegraphics[width=0.5\textwidth]{slide1.JPG}
+        }
+        \subfloat{
+           \includegraphics[width=0.5\textwidth]{slide2.JPG}
+        }
+	\\
+        \subfloat{
+            \label{fig:third}
+            \includegraphics[width=0.5\textwidth]{slide3.JPG}
+        }
+        \subfloat{
+            \label{fig:fourth}
+            \includegraphics[width=0.5\textwidth]{slide4.JPG}
+        }
+    \end{center}
+    \caption{Example scenario: SmartBalancer initially routes new flows to Host 1, but on receiving a host-overloaded message from Host 1, SmartBalancer routes new flows to Host 2.}
+   \label{fig:subfigures}
+\end{figure}
+For our tests, we ran Super Pi (to stress the CPU) on a host machine with our monitoring tool running and repeatedly pinged our canonical IP from different virtual hosts. We then measured the time difference between when the CPU utilization of the host reached its target threshold to when SmartBalancer began routing new flows to a different host (response time).
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=90mm]{responseTime.png}
-\caption{A simple caption}
+\includegraphics[width=100mm]{responseTime.png}
+\caption{SmartBalancer response time as a function of frequency of incoming host events. The response time (to increased CPU load) increases as the frequency of host events decreases. However, too high a frequency may lead to increased response times as well due to processing overhead.}
 \label{pic:responseTime}
 \end{figure}
 \paragraph{} To evaluate the effect of a large number of hosts generating frequent events, we analyzed response time versus event frequency. Figure 1 outlines our findings. We see that response time generally increases with event frequency (as the monitoring resolution is decreased to lower the event frequency). However, at the 10 events/sec mark, we see a large variance in response times due to increased processing overhead. Therefore, it is clear that there is a tradeoff between monitoring resolution and response times.

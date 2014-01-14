@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2014.1.11)  14 JAN 2014 14:27
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2014.1.11)  14 JAN 2014 15:42
 entering extended mode
  %&-line parsing enabled.
 **paper.tex
@@ -47,6 +47,37 @@ File: pdftex.def 2010/03/12 v0.04p Graphics/color for pdfTeX
 ))
 \Gin@req@height=\dimen103
 \Gin@req@width=\dimen104
+)
+(/usr/share/texmf-texlive/tex/latex/subfig/subfig.sty
+Package: subfig 2005/06/28 ver: 1.3 subfig package
+
+(/usr/share/texmf-texlive/tex/latex/caption/caption.sty
+Package: caption 2009/10/09 v3.1k Customizing captions (AR)
+
+(/usr/share/texmf-texlive/tex/latex/caption/caption3.sty
+Package: caption3 2009/10/09 v3.1k caption3 kernel (AR)
+\captionmargin=\dimen105
+\captionmargin@=\dimen106
+\captionwidth=\dimen107
+\caption@indent=\dimen108
+\caption@parindent=\dimen109
+\caption@hangindent=\dimen110
+)
+\c@ContinuedFloat=\count88
+)
+\c@KVtest=\count89
+\sf@farskip=\skip43
+\sf@captopadj=\dimen111
+\sf@capskip=\skip44
+\sf@nearskip=\skip45
+\c@subfigure=\count90
+\c@subfigure@save=\count91
+\c@lofdepth=\count92
+\c@subtable=\count93
+\c@subtable@save=\count94
+\c@lotdepth=\count95
+\sf@top=\skip46
+\sf@bottom=\skip47
 ) (./paper.aux)
 \openout1 = `paper.aux'.
 
@@ -65,17 +96,21 @@ LaTeX Font Info:    ... okay on input line 3.
 
 (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count88
-\scratchdimen=\dimen105
+\scratchcounter=\count96
+\scratchdimen=\dimen112
 \scratchbox=\box26
-\nofMPsegments=\count89
-\nofMParguments=\count90
+\nofMPsegments=\count97
+\nofMParguments=\count98
 \everyMPshowfont=\toks15
-\MPscratchCnt=\count91
-\MPscratchDim=\dimen106
-\MPnumerator=\count92
+\MPscratchCnt=\count99
+\MPscratchDim=\dimen113
+\MPnumerator=\count100
 \everyMPtoPDFconversion=\toks16
 )
+Package caption Info: Begin \AtBeginDocument code.
+Package caption3 Info: subfig package 1.2 or 1.3 is loaded.
+LaTeX Info: Redefining \subref on input line 3.
+Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 7.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -110,8 +145,28 @@ Missing character: There is no ˜ in font cmr10!
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
- [4]
-<responseTime.png, id=18, 1236.62pt x 638.385pt>
+
+<slide1.JPG, id=15, 722.7pt x 542.025pt>
+File: slide1.JPG Graphic file (type jpg)
+ <use slide1.JPG>
+<slide2.JPG, id=16, 722.7pt x 542.025pt>
+File: slide2.JPG Graphic file (type jpg)
+ <use slide2.JPG>
+Overfull \hbox (13.33331pt too wide) in paragraph at lines 84--88
+ [][] 
+ []
+
+<slide3.JPG, id=17, 722.7pt x 542.025pt>
+File: slide3.JPG Graphic file (type jpg)
+ <use slide3.JPG>
+<slide4.JPG, id=18, 722.7pt x 542.025pt>
+File: slide4.JPG Graphic file (type jpg)
+ <use slide4.JPG>
+Overfull \hbox (16.66664pt too wide) in paragraph at lines 92--97
+ [][][] 
+ []
+
+[4] <responseTime.png, id=22, 1236.62pt x 638.385pt>
 File: responseTime.png Graphic file (type png)
  <use responseTime.png>
 Missing character: There is no â in font cmr10!
@@ -124,26 +179,27 @@ Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
 
-[5 <./responseTime.png (PNG copy)>]
+[5 <./slide1.JPG> <./slide2.JPG> <./slide3.JPG> <./slide4.JPG>]
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
- (./paper.bbl [6]) [7] (./paper.aux) ) 
+ [6 <./responseTime.png (PNG copy)>] (./paper.bbl) [7] (./paper.aux) ) 
 Here is how much of TeX's memory you used:
- 930 strings out of 495061
- 11507 string characters out of 1182621
- 63609 words of memory out of 3000000
- 4151 multiletter control sequences out of 15000+50000
+ 2042 strings out of 495061
+ 30965 string characters out of 1182621
+ 94665 words of memory out of 3000000
+ 5248 multiletter control sequences out of 15000+50000
  7895 words of font info for 28 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 25i,6n,19p,1402b,203s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texmf-texlive/fonts/type1/pub
-lic/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfont
-s/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr12.p
-fb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on paper.pdf (7 pages, 155873 bytes).
+ 44i,6n,42p,1402b,357s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/sha
+re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-te
+xlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/
+type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/public
+/amsfonts/cm/cmr17.pfb>
+Output written on paper.pdf (7 pages, 306075 bytes).
 PDF statistics:
- 43 PDF objects out of 1000 (max. 8388607)
+ 47 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
