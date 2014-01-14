@@ -211,13 +211,17 @@ int main(int argc, const char* argv[])
 			connectedToServer = true;
 			std::cout<<"Successfully connected to server!"<<std::endl;
 		}
-	} 
+	}
+
+ 
+	bool isOverloaded = false;
+        bool isProcessActive = true;
 	
 	while(true){
 		double utilRate = getCPUUtil(DELAY_BETWEEN_UPDATES_MS);
 		std::cout<<"Utilization Rate:"<<utilRate<<std::endl;
-		bool isPidginActive = checkProcessActive(ACTIVE_PROCESS_NAME);
-		if(isPidginActive){
+		bool isProcessNowActive = checkProcessActive(ACTIVE_PROCESS_NAME);
+		if(isProcessNowActive){
 			std::cout<<"Pidgin is active."<<std::endl;
 		} else {
 			std::cout<<"Pidgin is not active."<<std::endl;
@@ -225,13 +229,25 @@ int main(int argc, const char* argv[])
 
 		if(connectedToServer == true){
 			int utilMsg = -1;
-			if(utilRate > MIN_UTIL_THRESHOLD){ utilMsg = 1; } // overloaded
+			bool isNowOverloaded = utilRate > MIN_UTIL_THRESHOLD;
+			if(isNowOverloaded){ utilMsg = 1; } // overloaded
 			else { utilMsg = 2; } // not overloaded
-			sendMsgToServer(serverfd, utilMsg);
+			
+			//Only send to server if state changed.
+			if(isOverloaded != isNowOverloaded){
+				std::cout<<"Sending Overload Change To Server"<<std::endl;
+				sendMsgToServer(serverfd, utilMsg);
+				isOverloaded = isNowOverloaded;
+			}
 
-			if(isPidginActive){ utilMsg = 4; } //Pidgin is up
+			if(isProcessNowActive){ utilMsg = 4; } //Pidgin is up
 			else { utilMsg = 3; } //Pidgin is down.
-			sendMsgToServer(serverfd, utilMsg);
+			
+			if(isProcessNowActive != isProcessActive){
+				std::cout<<"Sending Process Active Change To Server"<<std::endl;
+				sendMsgToServer(serverfd, utilMsg);
+				isProcessActive = isProcessNowActive;
+			}
 		}
 	}
 }
