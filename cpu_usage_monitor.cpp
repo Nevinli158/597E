@@ -13,12 +13,15 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
+#include <sys/time.h>
+#include <stdio.h>
+
 const std::string IP = "127.0.0.1";
 const std::string PORT = "9002";
 const double MIN_UTIL_THRESHOLD = .3;
 const std::string ACTIVE_PROCESS_NAME = "pidgin";
 const int DELAY_BETWEEN_UPDATES_MS = 1000;
-const bool ENABLE_SEND_TO_SERVER = true;
+const bool ENABLE_SEND_TO_SERVER = false;
 
 int connectToServer(std::string ip, std::string port){
 	int status;
@@ -216,11 +219,37 @@ int main(int argc, const char* argv[])
  
 	bool isOverloaded = false;
         bool isProcessActive = true;
+
+	timeval start,end;
+	long totalUtilTimeUS = 0;
+	long totalProcessActiveTimeUS = 0;
+	int utilRuns = 0;
+	int processActiveRuns = 0;
 	
 	while(true){
+
+		//Util Rate
+		gettimeofday(&start,NULL);
 		double utilRate = getCPUUtil(DELAY_BETWEEN_UPDATES_MS);
+		gettimeofday(&end,NULL);
+		if(start.tv_sec == 0 || end.tv_sec == 0){std::cout<<"sec != 0\n";}
+		totalUtilTimeUS += start.tv_usec - start.tv_usec;
 		std::cout<<"Utilization Rate:"<<utilRate<<std::endl;
+
+		double elapsedTime = ((double)totalUtilTimeUS)/((double)utilRuns);
+		std::cout<<"Timing Util Function:"<<elapsedTime<<" us\n";
+
+		//Process Active
+		gettimeofday(&start,NULL);
 		bool isProcessNowActive = checkProcessActive(ACTIVE_PROCESS_NAME);
+		gettimeofday(&end,NULL);
+		if(start.tv_sec == 0 || end.tv_sec == 0){std::cout<<"sec != 0\n";}
+		totalProcessActiveTimeUS += start.tv_usec - start.tv_usec;
+		processActiveRuns++;
+		elapsedTime = ((double)totalProcessActiveTimeUS)/((double)processActiveRuns);
+		std::cout<<"Timing Process Active Function:"<<elapsedTime<<" us\n";
+
+
 		if(isProcessNowActive){
 			std::cout<<"Pidgin is active."<<std::endl;
 		} else {
