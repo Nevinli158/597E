@@ -32,3 +32,11 @@ C. Kim, N. Karri",
   publisher = "In SigComm",
   year = "2013"
 }
+
+@Article{Onix,
+  author = "Teemu Koponen, Martin Casado, Natasha Gude, Jeremy Stribling, Leon Poutievski,
+Min Zhu, Rajiv Ramanathan, Yuichiro Iwata, Hiroaki Inoue, Takayuki Hama, Scott Shenker"
+  title = "Onix: A Distributed Control Platform for Large-scale Production Networks",
+  publisher = "In OSDI",
+  year = "2010"
+}

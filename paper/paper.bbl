@@ -3,7 +3,7 @@
 \bibitem{Pyretic}
 N.~Foster J. Rexford D.~Walker C.~Monsanto, J.~Reich.
 \newblock Composing software-defined networks.
-\newblock 2013.
+\newblock In {\em USENIX NSDI}, 2013.
 
 \bibitem{PyResonance}
 M.~Shahbaz J. Reich N. Feamster R.~Clark H.~Kim, A.~Gupta.
@@ -13,13 +13,13 @@ M.~Shahbaz J. Reich N. Feamster R.~Clark H.~Kim, A.~Gupta.
 \bibitem{Hedera}
 B.~Raghavan N. Huang A.~Vahdat M.~Al-Fares, S.~Radhakrishnan.
 \newblock Hedera: Dynamic flow scheduling for data center networks.
-\newblock 2010.
+\newblock In {\em USENIX NSDI}, 2010.
 
 \bibitem{Ananta}
 L.~Yuan A. Murthy A. Greenberg D. A. Maltz R. Kern H. Kumar M. Zikos H. Wu C.
   Kim N.~Karri P.~Patel, D.~Bansal.
 \newblock Ananta: Cloud scale load balancing.
-\newblock 2013.
+\newblock In {\em SigComm}, 2013.
 
 \bibitem{HONE}
 M.~J. Freedman J. Rexford D.~Walker P~Sun, M.~Yu.
@@ -27,7 +27,10 @@ M.~J. Freedman J. Rexford D.~Walker P~Sun, M.~Yu.
 \newblock 2013.
 
 \bibitem{Onix}
-Natasha Gude Jeremy Stribling Leon Poutievski Min Zhu Rajiv Ramanathan Yuichiro
-  Iwata Hiroaki Inoue Takayuki Hama Scott~Shenker Teemu~Koponen, Martin~Casado.
+N.~Gude J. Stribling L. Poutievski M. Zhu R. Ramanathan Y. Iwata H. Inoue T.
+  Hama S.~Shenker T.~Koponen, M.~Casado.
+\newblock Onix: A distributed control platform for large-scale production
+  networks.
+\newblock In {\em OSDI}, 2010.
 
 \end{thebibliography}
